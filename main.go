@@ -13,6 +13,9 @@ func makeHelloWorld(opt string) string {
 
 func main() {
 	router := gin.Default()
+	router.GET("/", func(ctx *gin.Context) {
+		ctx.String(http.StatusOK, makeHelloWorld(""))
+	})
 	router.GET("/:opt", func(ctx *gin.Context) {
 		opt := ctx.Param("opt")
 		ctx.String(http.StatusOK, makeHelloWorld(opt))
