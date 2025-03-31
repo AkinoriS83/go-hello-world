@@ -2,7 +2,7 @@ name: Build Go App for CodeDeploy
 
 on:
   release:
-    types: [published, prereleased]
+    types: [prereleased]
 
 permissions:
   contents: read
@@ -10,6 +10,7 @@ permissions:
   actions: read
   id-token: write
   deployments: write
+  pull-requests: write
 
 jobs:
   release:
