@@ -4,8 +4,15 @@ on:
   release:
     types: [published, prereleased]
 
+permissions:
+  contents: read
+  packages: write
+  actions: read
+  id-token: write
+  deployments: write
+
 jobs:
-  package:
+  release:
     runs-on: ubuntu-24.04
 
     steps:
