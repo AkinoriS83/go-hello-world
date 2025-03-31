@@ -1,0 +1,37 @@
+name: Build Go App for CodeDeploy
+
+on:
+  release:
+    types: [published, prereleased]
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+            go-version: 1.24
+  
+      - name: Build binary
+        run: |
+          mkdir -p output
+          go build -o output/myapp .
+
+      - name: Copy deployment files
+        run: |
+          cp code_deploy/appspec.yml output/
+          cp -r code_deploy/scripts output/
+
+      - name: Zip package
+        run: |
+          cd output
+          zip -r ../deployment.zip .
+
+      - name: Upload to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: deployment.zip
