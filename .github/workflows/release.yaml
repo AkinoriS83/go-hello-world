@@ -24,6 +24,7 @@ jobs:
         run: |
           mkdir -p output
           go build -o output/myapp .
+          chmod +x output/myapp
 
       - name: Copy deployment files
         run: |
