@@ -26,11 +26,6 @@ jobs:
           go build -o output/myapp .
           chmod +x output/myapp
 
-      - name: Copy deployment files
-        run: |
-          cp code_deploy/appspec.yml output/
-          cp -r code_deploy/scripts output/
-
       - name: Zip package
         run: |
           cd output
