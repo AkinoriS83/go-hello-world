@@ -8,7 +8,7 @@ import (
 )
 
 func makeHelloWorld(opt string) string {
-	return fmt.Sprintf("Hello World! for Code Deploy %s", opt)
+	return fmt.Sprintf("Hello World! by myapp %s", opt)
 }
 
 func main() {
