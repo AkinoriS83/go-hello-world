@@ -11,9 +11,6 @@ permissions:
   id-token: write
   contents: read
 
-env:
-  IMAGE_TAG: latest
-
 jobs:
  build-and-push:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
@@ -28,13 +25,13 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Build, tag, and push image to ECR
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        run: |
-          docker build -t $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }} .
-          docker push $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+      - name: Authenticate to ECR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.AWS_ECR_URL }}
+    
+      - name: Perform a Docker build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: ${{ secrets.AWS_ECR_URL }}/${{ secrets.REPOSITORY_NAME }}:${{ github.sha }}
