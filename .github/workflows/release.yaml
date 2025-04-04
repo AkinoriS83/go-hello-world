@@ -7,6 +7,7 @@ on:
 permissions:
   contents: write
   packages: write
+  id-token: write
 
 jobs:
   release:
@@ -35,3 +36,23 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: deployment.zip
+
+      - name: Copy deployment files
+        run: |
+          cp code_deploy/appspec.yml output/
+          cp -r code_deploy/scripts output/
+
+      - name: Zip package for AWS CodeDeploy
+        run: |
+          cd output
+          zip -r ../deployment.zip .
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+  
+      - name: Upload to S3 (deployment.zip)
+        run: |
+          aws s3 cp deployment.zip s3://${{ secrets.AWS_S3_BUCKET }}/go-hello-world/${{ github.sha }}.zip --only-show-errors
