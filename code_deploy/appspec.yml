@@ -1,15 +1,15 @@
 version: 0.0
- os: linux
- files:
-   - source: myapp
-     destination: /home/ubuntu/myapp
- hooks:
-   ApplicationStop:
-     - location: scripts/stop.sh
-       timeout: 20
-   BeforeInstall:
-     - location: scripts/install.sh
-       timeout: 20
-   ApplicationStart:
-     - location: scripts/start.sh
-       timeout: 20
+os: linux
+files:
+  - source: myapp
+    destination: /home/ubuntu/myapp
+hooks:
+  ApplicationStop:
+    - location: scripts/stop.sh
+      timeout: 20
+  BeforeInstall:
+    - location: scripts/before_install.sh
+      timeout: 20
+  ApplicationStart:
+    - location: scripts/start.sh
+      timeout: 20

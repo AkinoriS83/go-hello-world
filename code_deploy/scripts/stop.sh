@@ -1,2 +1,2 @@
 #!/bin/bash
- pkill myapp || true
+pkill myapp || true
